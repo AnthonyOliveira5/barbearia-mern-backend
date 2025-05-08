@@ -14,7 +14,7 @@ export const getCliente = async (req, res) => {
 export const createCliente = async (req, res) => {
     const cliente = req.body;
 
-    if(!cliente.name || !cliente.email || !cliente.senha || !cliente.chaveSeguraRecuperaSenha || cliente.role) {
+    if(!cliente.name || !cliente.email || !cliente.senha || !cliente.chaveSeguraRecuperaSenha || !cliente.role) {
         return res.status(400).json({sucess:false, message: "Por favor, preencha todos os campos"})
     }
 

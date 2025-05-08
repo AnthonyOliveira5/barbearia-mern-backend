@@ -14,7 +14,7 @@ export const getUsuarios = async (req, res) => {
 export const createUsuario = async (req, res) => {
     const usuario = req.body;
 
-    if(!usuario.name || !usuario.email || !usuario.senha || !usuario.telefone || usuario.role) {
+    if(!usuario.name || !usuario.email || !usuario.senha || !usuario.telefone || !usuario.role) {
         return res.status(400).json({sucess:false, message: "Por favor, preencha todos os campos"})
     }
 
