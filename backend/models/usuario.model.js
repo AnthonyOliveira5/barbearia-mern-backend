@@ -55,9 +55,15 @@ const usuarioSchema = new mongoose.Schema({
     type: Number,
     required: false
   },
-  role: { 
-    type: String, 
-    required: true 
+  
+  firebase_uid: {
+    type: String,
+    required: true
+  },
+
+  role: {
+    type: String,
+    required: true
   }
 });
 

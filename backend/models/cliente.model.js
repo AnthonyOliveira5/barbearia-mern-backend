@@ -35,16 +35,17 @@ const clienteSchema = new mongoose.Schema({
         required: false
     },
 
-    chaveSeguraRecuperaSenha: {
-        type: String,
-        required: true
-    },
-
     endereco: {
         type: String,
         required: false
     },
+
     role: {
+        type: String,
+        required: true
+    },
+
+    firebase_uid: {
         type: String,
         required: true
     }
