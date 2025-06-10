@@ -1,6 +1,5 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import cors from 'cors' // <-- importe o CORS
 import { connectDB } from './config/db.js';
 import servicoRoutes from './routes/servico.route.js'
 import agendamentoRoutes from './routes/agendamento.route.js'

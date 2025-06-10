@@ -1,3 +1,4 @@
+import Usuario from '../models/usuario.model.js';
 import { getAuth } from '../services/firebase.js';
 
 export const verifyTokenAndRole = (allowedRoles = []) => {
@@ -13,10 +14,18 @@ export const verifyTokenAndRole = (allowedRoles = []) => {
     try {
       const decodedToken = await getAuth().verifyIdToken(token);
 
+      console.log(decodedToken)
+
+      const user = await Usuario.findOne({ firebase_uid: decodedToken.uid });
+
+      if (!user) {
+        return res.status(404).json({ success: false, message: "Usuário não encontrado" });
+      }
+
       req.user = {
         uid: decodedToken.uid,
         email: decodedToken.email,
-        role: decodedToken.role || "client",
+        role: user.role || "client",
       };
 
       if (allowedRoles.length > 0 && !allowedRoles.includes(req.user.role)) {
