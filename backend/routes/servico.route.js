@@ -7,6 +7,6 @@ const router = express.Router()
 router.get('/', getServicos);
 router.post('/', verifyTokenAndRole(["admin"]), createServico);
 router.put("/:id", verifyTokenAndRole(["admin"]), updateServico)
-router.delete('/:id', verifyTokenAndRole(["client", "admin"]), deleteServico);
+router.delete('/:id', verifyTokenAndRole(["admin"]), deleteServico);
 
 export default router;
