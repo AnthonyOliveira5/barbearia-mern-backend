@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import Agendamento from "../models/agendamento.model.js";
+import Servico from "../models/servico.model.js";
+import SolicitarServico from "../models/solicitarServico.model.js";
 
 export const getAgendamentos = async (req, res) => {
     try {
@@ -37,25 +39,70 @@ export const getAgendamentoById = async (req, res) => {
 };
 
 export const createAgendamento = async (req, res) => {
-    const { cliente, usuario, dataAgendamento, total } = req.body;
+    const { cliente, usuario, dataAgendamento, servicos } = req.body;
 
-    if (!cliente || !usuario || !dataAgendamento || !total) {
-        return res.status(400).json({ success: false, message: "Todos os campos são obrigatórios" });
+    if (!cliente || !usuario || !dataAgendamento || !Array.isArray(servicos) || servicos.length === 0) {
+        return res.status(400).json({ success: false, message: "Campos obrigatórios: cliente, usuário, dataAgendamento, e pelo menos um serviço" });
     }
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
 
     try {
         const novoAgendamento = new Agendamento({
             cliente,
             usuario,
             dataAgendamento,
-            total
+            total: 0
         });
 
-        await novoAgendamento.save();
-        res.status(201).json({ success: true, data: novoAgendamento });
+        await novoAgendamento.save({ session });
+
+        let totalGeral = 0;
+        const solicitacoes = [];
+
+        for (const item of servicos) {
+            const { servico, quantidade } = item;
+
+            const servicoData = await Servico.findById(servico);
+            if (!servicoData) {
+                throw new Error(`Serviço com ID ${servico} não encontrado`);
+            }
+
+            const preco = servicoData.price;
+            const total = preco * quantidade;
+            totalGeral += total;
+
+            const novaSolicitacao = new SolicitarServico({
+                servico,
+                quantidade,
+                preco,
+                total,
+                agendamento: novoAgendamento._id
+            });
+
+            await novaSolicitacao.save({ session });
+            solicitacoes.push(novaSolicitacao);
+        }
+
+        novoAgendamento.total = totalGeral;
+        await novoAgendamento.save({ session });
+
+        await session.commitTransaction();
+        session.endSession();
+
+        res.status(201).json({
+            success: true,
+            data: {
+                agendamento: novoAgendamento,
+                solicitacoes
+            }
+        });
     } catch (error) {
-        console.error("Erro ao criar agendamento:", error.message);
-        res.status(500).json({ success: false, message: "Erro no servidor" });
+        await session.abortTransaction();
+        session.endSession();
+        console.error("Erro ao criar agendamento com serviços:", error.message);
+        res.status(500).json({ success: false, message: "Erro ao criar agendamento com serviços" });
     }
 };
 
