@@ -22,7 +22,7 @@ const servicoSchema = new mongoose.Schema({
         required: false
     }
 }, {
-    timestamps: true //createdAt, updatedAt
+    timestamps: true
 });
 
 const Servico = mongoose.model('Servico', servicoSchema)

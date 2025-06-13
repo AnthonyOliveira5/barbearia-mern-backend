@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Agendamento from "../models/agendamento.model.js";
 import Servico from "../models/servico.model.js";
 import SolicitarServico from "../models/solicitarServico.model.js";
+import { buscarAgendamentosPorClienteEPeriodo } from "../services/agendamento.service.js";
 
 export const getAgendamentos = async (req, res) => {
     try {
@@ -152,4 +153,19 @@ export const deleteAgendamento = async (req, res) => {
         console.error("Erro ao deletar agendamento:", error.message);
         res.status(500).json({ success: false, message: "Erro no servidor" });
     }
+};
+
+export const getAgendamentosFiltrados = async (req, res) => {
+  const { clienteId, dataInicio, dataFim } = req.query;
+
+  if (!clienteId || !dataInicio || !dataFim) {
+    return res.status(400).json({ success: false, message: "Parâmetros obrigatórios: clienteId, dataInicio, dataFim" });
+  }
+
+  try {
+    const agendamentos = await buscarAgendamentosPorClienteEPeriodo(clienteId, dataInicio, dataFim);
+    res.status(200).json({ success: true, data: agendamentos });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Erro ao buscar agendamentos filtrados" });
+  }
 };

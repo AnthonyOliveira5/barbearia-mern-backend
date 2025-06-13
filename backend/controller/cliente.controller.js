@@ -11,6 +11,27 @@ export const getCliente = async (req, res) => {
     }
 }
 
+export const getClienteById = async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ success: false, message: "ID inválido" });
+    }
+
+    try {
+        const cliente = await Cliente.findById(id)
+
+        if (!cliente) {
+            return res.status(404).json({ success: false, message: "cliente não encontrado" });
+        }
+
+        res.status(200).json({ success: true, data: cliente });
+    } catch (error) {
+        console.error("Erro ao buscar cliente:", error.message);
+        res.status(500).json({ success: false, message: "Erro no servidor" });
+    }
+};
+
 export const createCliente = async (req, res) => {
     const cliente = req.body;
 

@@ -5,7 +5,7 @@ import {verifyTokenAndRole} from "../middleware/verifyTokenAndRole.js";
 const router = express.Router()
 
 router.get('/',verifyTokenAndRole(["admin"]), getUsuarios);
-router.post('/', verifyTokenAndRole(["admin"]), createUsuario);
+router.post('/', createUsuario);
 router.put("/:id", verifyTokenAndRole(["admin"]), updateUsuario)
 router.delete('/:id', verifyTokenAndRole(["admin"]), deleteUsuario);
 
