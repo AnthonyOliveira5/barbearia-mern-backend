@@ -25,7 +25,7 @@ export const verifyTokenAndRole = (allowedRoles = []) => {
       req.user = {
         uid: decodedToken.uid,
         email: decodedToken.email,
-        role: user.role || "client",
+        role: user.role || "cliente",
       };
 
       if (allowedRoles.length > 0 && !allowedRoles.includes(req.user.role)) {
