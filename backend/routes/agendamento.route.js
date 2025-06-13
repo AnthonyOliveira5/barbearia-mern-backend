@@ -4,11 +4,11 @@ import { verifyTokenAndRole } from '../middleware/verifyTokenAndRole.js';
 
 const router = express.Router()
 
-router.get('/', verifyTokenAndRole(["client", "barber", "admin"]), getAgendamentos);
-router.get('/:id',verifyTokenAndRole(["client", "barber", "admin"]), getAgendamentoById);
-router.get('/filtrados', verifyTokenAndRole(["client", "barber", "admin"]), getAgendamentosFiltrados);
-router.post('/', verifyTokenAndRole(["client", "barber", "admin"]), createAgendamento);
-router.put("/:id",verifyTokenAndRole(["client", "barber", "admin"]), updateAgendamento)
-router.delete('/:id',verifyTokenAndRole(["client", "barber", "admin"]), deleteAgendamento);
+router.get('/', verifyTokenAndRole(["client", "barbeiro", "admin"]), getAgendamentos);
+router.get('/:id',verifyTokenAndRole(["client", "barbeiro", "admin"]), getAgendamentoById);
+router.get('/filtrados', verifyTokenAndRole(["client", "barbeiro", "admin"]), getAgendamentosFiltrados);
+router.post('/', verifyTokenAndRole(["client", "barbeiro", "admin"]), createAgendamento);
+router.put("/:id",verifyTokenAndRole(["client", "barbeiro", "admin"]), updateAgendamento)
+router.delete('/:id',verifyTokenAndRole(["client", "barbeiro", "admin"]), deleteAgendamento);
 
 export default router;

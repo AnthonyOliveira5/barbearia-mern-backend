@@ -4,10 +4,10 @@ import { verifyTokenAndRole } from '../middleware/verifyTokenAndRole.js';
 
 const router = express.Router()
 
-router.get('/', verifyTokenAndRole(["client", "barber", "admin"]), getSolicitacoes);
-router.get('/:id', verifyTokenAndRole(["client", "barber", "admin"]), getSolicitacaoById);
-router.post('/', verifyTokenAndRole(["client", "barber", "admin"]), createSolicitacao);
-router.put("/:id", verifyTokenAndRole(["client", "barber", "admin"]), updateSolicitacao);
-router.delete('/:id', verifyTokenAndRole(["client", "barber", "admin"]), deleteSolicitacao);
+router.get('/', verifyTokenAndRole(["client", "barbeiro", "admin"]), getSolicitacoes);
+router.get('/:id', verifyTokenAndRole(["client", "barbeiro", "admin"]), getSolicitacaoById);
+router.post('/', verifyTokenAndRole(["client", "barbeiro", "admin"]), createSolicitacao);
+router.put("/:id", verifyTokenAndRole(["client", "barbeiro", "admin"]), updateSolicitacao);
+router.delete('/:id', verifyTokenAndRole(["client", "barbeiro", "admin"]), deleteSolicitacao);
 
 export default router;

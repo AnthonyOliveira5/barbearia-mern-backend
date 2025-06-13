@@ -32,6 +32,24 @@ export const getClienteById = async (req, res) => {
     }
 };
 
+export const getClienteFirebaseUid = async (req, res) => {
+    const { firebase_uid } = req.params;
+
+    try {
+        const cliente = await Cliente.findOne({ firebase_uid });
+
+        if (!cliente) {
+            return res.status(404).json({ success: false, message: "cliente não encontrado" });
+        }
+
+        res.status(200).json({ success: true, data: cliente });
+    } catch (error) {
+        console.error("Erro ao buscar cliente:", error.message);
+        res.status(500).json({ success: false, message: "Erro no servidor" });
+    }
+};
+
+
 export const createCliente = async (req, res) => {
     const cliente = req.body;
 

@@ -11,6 +11,54 @@ export const getUsuarios = async (req, res) => {
     }
 }
 
+export const getUsuariosById = async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ success: false, message: "ID inválido" });
+    }
+
+    try {
+        const usuario = await Usuario.findById(id)
+
+        if (!usuario) {
+            return res.status(404).json({ success: false, message: "usuario não encontrado" });
+        }
+
+        res.status(200).json({ success: true, data: usuario });
+    } catch (error) {
+        console.error("Erro ao buscar usuario:", error.message);
+        res.status(500).json({ success: false, message: "Erro no servidor" });
+    }
+};
+
+export const getUsuarioByFirebaseUid = async (req, res) => {
+    const { firebase_uid } = req.params;
+
+    try {
+        const usuario = await Usuario.findOne({ firebase_uid });
+
+        if (!usuario) {
+            return res.status(404).json({ success: false, message: "Usuário não encontrado" });
+        }
+
+        res.status(200).json({ success: true, data: usuario });
+    } catch (error) {
+        console.error("Erro ao buscar usuário:", error.message);
+        res.status(500).json({ success: false, message: "Erro no servidor" });
+    }
+};
+
+export const getBarbeiros = async (req, res) => {
+  try {
+    const barbeiros = await Usuario.find({ role: 'barbeiro' });
+    res.status(200).json({ success: true, data: barbeiros });
+  } catch (error) {
+    console.error('Erro ao buscar barbeiros:', error.message);
+    res.status(500).json({ success: false, message: 'Erro no servidor' });
+  }
+};
+
 export const createUsuario = async (req, res) => {
     const usuario = req.body;
 

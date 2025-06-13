@@ -26,6 +26,7 @@ app.use('/api/agendamentos', agendamentoRoutes);
 app.use('/api/clientes', clienteRoutes);
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/solicitarServicos', solicitarservicoRoutes);
+app.use("/uploads", express.static("uploads"));
 
 app.listen(PORT, () => {
     connectDB();
